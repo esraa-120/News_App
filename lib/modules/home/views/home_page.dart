@@ -4,10 +4,12 @@ import 'package:news_app/core/theme/app_colors.dart';
 import 'package:news_app/gen/assets.gen.dart';
 import 'package:news_app/main.dart';
 import 'package:news_app/models/category_model.dart';
-import 'package:news_app/modules/home/pages/widgets/category_card_item.dart';
-import 'package:news_app/modules/home/pages/widgets/drawer_builder_view.dart';
-import 'package:news_app/modules/home/pages/widgets/selected_category_view.dart';
+import 'package:news_app/modules/home/views/widgets/category_card_item.dart';
+import 'package:news_app/modules/home/views/widgets/drawer_builder_view.dart';
+import 'package:news_app/modules/home/views/widgets/selected_category_view.dart';
 
+
+///Model -- View Model [Cubit] -- View
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 

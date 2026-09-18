@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/modules/home/pages/home_page.dart';
+import 'package:news_app/modules/home/views/home_page.dart';
 import 'package:news_app/modules/splash/presentation/pages/splash_page.dart';
 
 import 'app_routes_name.dart';
