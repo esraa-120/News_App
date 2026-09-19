@@ -28,7 +28,7 @@ class HttpRequestsService {
     return sources;
   }
 
-  static Future<List<ArticleModel>> getAllArticles(String sourceId) async {
+  static Future<List<ArticleModel>> getAllArticles(String sourceId,) async {
     final Map <String, dynamic> queryParameters = {
       "apiKey": AppConstants.apiKey,
       "sources": sourceId
@@ -46,5 +46,41 @@ class HttpRequestsService {
     articles.add(articleModel);
   }
     return articles;
+  }
+
+
+
+  static Future<List<ArticleModel>> searchArticles({
+    required String searchQuery,
+    required int pageNumber,
+  }) async {
+    final queryParameters = {
+      "apiKey": AppConstants.apiKey,
+      "q": searchQuery,
+      "page": pageNumber.toString(),
+      "pageSize": "10",
+    };
+
+    final response = await http.get(
+      Uri.https(
+        AppConstants.baseURL,
+        EndPoints.searchArticles,
+        queryParameters,
+      ),
+    );
+
+    final decodedData = jsonDecode(response.body);
+
+    if (decodedData["status"] != "ok") {
+      throw Exception(
+        decodedData["message"] ?? "Something went wrong",
+      );
+    }
+
+    final List articlesData = decodedData["articles"] ?? [];
+
+    return articlesData
+        .map((article) => ArticleModel.fromJson(article))
+        .toList();
   }
 }

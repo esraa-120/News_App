@@ -1,36 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/l10n/app_localizations.dart';
+import 'package:news_app/core/routes/app_routes_name.dart';
 import 'package:news_app/core/theme/app_colors.dart';
 import 'package:news_app/gen/assets.gen.dart';
 import 'package:news_app/main.dart';
+import 'package:news_app/models/category_model.dart';
 import 'package:news_app/modules/home/views/widgets/category_card_item.dart';
 import 'package:news_app/modules/home/views/widgets/drawer_builder_view.dart';
 import 'package:news_app/modules/home/views/widgets/selected_category_view.dart';
-import 'package:provider/provider.dart';
 
-import '../view_model/home_view_model.dart';
 
-class HomePage extends StatelessWidget {
- const HomePage({super.key});
+///Model -- View Model [Cubit] -- View
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  final List<CategoryModel> _categories = [
+    CategoryModel(id: 'general', name: 'General', image: Assets.images.general.path),
+    CategoryModel(id: 'business', name: 'Business', image: Assets.images.busniess.path),
+    CategoryModel(id: 'sports', name: 'Sports', image: Assets.images.sport.path),
+    CategoryModel(id: 'technology', name: 'Technology', image: Assets.images.technology.path),
+    CategoryModel(id: 'entertainment', name: 'Entertainment', image: Assets.images.entertainment.path),
+    CategoryModel(id: 'health', name: 'Health', image: Assets.images.helth.path),
+    CategoryModel(id: 'science', name: 'Science', image: Assets.images.science.path),
+  ];
+
+  CategoryModel? _selectCategory;
 
   @override
   Widget build(BuildContext context) {
 
     final local = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-
-    final vm = Provider.of<HomeViewModel>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text(
-          vm.selectedCategory == null ? local.home
-           : vm.selectedCategory!.name ,
+          _selectCategory == null ? local.home
+           : _selectCategory!.name ,
         ),),
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Assets.icons.searchIcn.svg(),
+            child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutesName.search);
+                },
+                child: Assets.icons.searchIcn.svg()),
           ),
         ],
       ),
@@ -38,13 +58,15 @@ class HomePage extends StatelessWidget {
         backgroundColor: AppColors.mainText,
         child: DrawerBuilderView(
           goToHome: (){
-            vm.changeSelectedCategory(null);
+            setState(() {
+              _selectCategory = null;
+            });
             navigatorKey.currentState!.pop();
           },
         ),
       ),
 
-      body: vm.selectedCategory == null ? Padding(
+      body: _selectCategory == null ? Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           spacing: 16,
@@ -60,10 +82,11 @@ class HomePage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        vm.changeSelectedCategory(vm.categories[index]);
+                        _selectCategory = _categories[index];
+                        setState(() {});
                       },
                       child: CategoryCardItem(
-                        categoryModel: vm.categories[index],
+                        categoryModel: _categories[index],
                         index: index,
                       ),
                     );
@@ -71,13 +94,15 @@ class HomePage extends StatelessWidget {
                   separatorBuilder: (context, index) {
                     return SizedBox(height: 16,);
                   },
-                  itemCount: vm.categories.length,
+                  itemCount: _categories.length,
               ),
             )
           ],
         ),
       )
-          : SelectedCategoryView(),
+          : SelectedCategoryView(
+        selectedCategoryModel: _selectCategory!,
+      ),
     );
   }
 }
