@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/models/category_model.dart';
 import 'package:news_app/modules/home/articles_cubit/articles_cubit.dart';
 import 'package:news_app/modules/home/articles_cubit/articles_states.dart';
+import 'package:news_app/modules/home/repository/remote_repository_imp.dart';
 import 'package:news_app/modules/home/sources_cubit/sources_cubit.dart';
 import 'package:news_app/modules/home/sources_cubit/sources_states.dart';
 import 'package:news_app/modules/home/views/widgets/tab_bar_item.dart';
@@ -24,13 +25,16 @@ class _SelectedCategoryViewState extends State<SelectedCategoryView> {
 
   @override
   Widget build(BuildContext context) {
+
+    /// Check network connection
+    final repositoryInterface = RemoteRepositoryImp();
     return MultiBlocProvider(
       providers: [
         BlocProvider<SourcesCubit>(
           create: (context) =>
-              SourcesCubit()..getAllSources(widget.selectedCategoryModel.id),
+              SourcesCubit(repositoryInterface: repositoryInterface)..getAllSources(widget.selectedCategoryModel.id),
         ),
-        BlocProvider<ArticlesCubit>(create: (context) => ArticlesCubit()),
+        BlocProvider<ArticlesCubit>(create: (context) => ArticlesCubit(repositoryInterface: repositoryInterface)),
       ],
       child: Column(
         spacing: 20,

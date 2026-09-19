@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/core/l10n/app_localizations.dart';
+import 'package:news_app/core/routes/app_routes_name.dart';
 import 'package:news_app/core/theme/app_colors.dart';
 import 'package:news_app/gen/assets.gen.dart';
 import 'package:news_app/main.dart';
@@ -45,7 +46,11 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Assets.icons.searchIcn.svg(),
+            child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutesName.search);
+                },
+                child: Assets.icons.searchIcn.svg()),
           ),
         ],
       ),

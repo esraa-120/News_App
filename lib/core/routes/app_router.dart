@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/modules/home/search/search_screen.dart';
 import 'package:news_app/modules/home/views/home_page.dart';
 import 'package:news_app/modules/splash/presentation/pages/splash_page.dart';
 
@@ -16,6 +17,10 @@ class AppRouter {
         case AppRoutesName.home:
         return MaterialPageRoute(
           builder: (context) => const HomePage(),
+        );
+        case AppRoutesName.search:
+        return MaterialPageRoute(
+          builder: (context) => const SearchScreen(),
         );
         default:
           return MaterialPageRoute(
